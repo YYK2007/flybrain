@@ -1,12 +1,57 @@
 # Flybrain
 
-A local 3D flight simulator controlled by a rate model built from the MaleCNS fly connectome. Watch the fly navigate gates, inspect the activity behind each flap, and train the decoder while it flies.
+Can a fruit fly connectome steer a game?
 
-The controller uses 166,700 neurons and 25,582,938 directed connections. Training adjusts a logistic decoder; connectome weights stay fixed. The model uses engineered sensory inputs and simplified dynamics, so game performance does not establish biological learning or a benefit from the original wiring.
+Flybrain is a third-person 3D flight experiment driven by a rate model built from the **MaleCNS v1.0 connectome**. A small fly navigates gates while the interface exposes the activity, decoder signal, and exact decision behind every flap.
 
-## Setup
+The simulation updates **166,700 neurons and 25,582,938 directed connections** at every decision. You can watch a trained controller fly, start from an untrained decoder, let it adapt, pause on a flap, inspect individual neurons, or disconnect the neural output and see what changes.
 
-Requires Python 3.12+, Node.js 22+, [uv](https://docs.astral.sh/uv/), and a browser with WebGL2. No API key or paid service is required.
+## What you can explore
+
+- A live 3D flight course with calm air, gusts, and narrow gaps
+- The controller's flap probability and applied action
+- A sampled anatomical view of 1,800 real neuron coordinates
+- Activity and activity-change views for individual neurons
+- Exact population contributions to the decoder's decision
+- A shared timeline of neural activity, flap signal, applied flaps, and velocity
+- Trained, untrained, and saved decoder checkpoints
+- Live supervised adaptation and checkpoint saving
+- Interventions: pause, single-step, slow observation, and output disconnection
+
+## How the controller works
+
+Seven measurements of the game state become 14 paired channels assigned to 3,377 R1–R6 neurons. They encode relative gap height, vertical speed, gate distance, fly height, the next gap, wind, and gap width.
+
+The full retained graph then advances with a simplified recurrent rate model:
+
+```text
+drive = 0.06 + 0.85 × W × activity + sensory_input
+activity_next = 0.12 × activity + 0.88 × tanh(max(drive, 0))
+```
+
+A logistic decoder reads 64 population averages and their first differences. A probability above 0.5 requests a flap, subject to a short wing cooldown. No raw game measurement bypasses the neural state to enter the decoder.
+
+Training changes the decoder weights. The connectome weights remain fixed.
+
+## Recorded results
+
+The included evaluation uses course seeds kept separate from training:
+
+| Condition | Result |
+| --- | --- |
+| Trained decoder | 6/6 standard courses completed |
+| Wind and narrow gaps | 4/4 courses completed |
+| Untrained decoder | 0 gates cleared |
+| Neural activity silenced | 0 gates cleared |
+| Presynaptic IDs shuffled | 3/3 courses completed |
+
+Each completed run was capped at 15 gates. The shuffled result is important: this experiment does **not** establish that the original biological topology is better. A fair topology comparison would need matched retraining and more evaluation seeds.
+
+The full runs and termination reasons are in [`reports/evaluation.json`](reports/evaluation.json). Training history is in [`reports/training.json`](reports/training.json).
+
+## Run the experiment
+
+You need Python 3.12+, Node.js 22+, [uv](https://docs.astral.sh/uv/), and a WebGL2 browser. No API key or paid service is required.
 
 ```sh
 uv venv --python 3.12 .venv
@@ -19,39 +64,13 @@ npm run build
 npm start
 ```
 
-Open **http://127.0.0.1:8765**. Stop the server with Ctrl-C. On macOS, `Launch Flybrain.command` runs the same startup script after setup.
+Open `http://127.0.0.1:8765`. The public MaleCNS download is about 1.1 GB. Raw files and the prepared 205 MB graph are excluded from Git and recreated by the setup scripts. Trained and untrained decoder checkpoints are included.
 
-The download is about 1.1 GB. Raw files and the prepared graph are excluded from Git; the scripts recreate them. Source URLs and SHA-256 hashes are recorded in [`data/sources.json`](data/sources.json). Trained and untrained decoder checkpoints are included. Your saved `checkpoints/live.json` stays local.
+On macOS, `Launch Flybrain.command` starts the experiment after setup.
 
-## Controls
+## Train and test
 
-- **Watch it fly:** freeze the decoder and watch autonomous flight.
-- **Let it learn:** update the decoder with coach corrections while it controls the fly. This is supervised adaptation.
-- **Trained / Untrained / Saved learning:** choose the starting decoder.
-- **Calm / Gusts / Narrow:** change the course conditions.
-- **Pause / Step one decision:** freeze the simulation or advance it by 50 ms.
-- **Inspect next flap:** pause when a flap is applied.
-- **Disconnect output:** block motor commands and suspend learning while neural activity continues.
-- **Save learning checkpoint:** save the current decoder locally.
-
-The inspector shows sampled neuron IDs, modeled activity, decoder contributions, and a shared timeline for flap probability and vertical velocity. Anatomy shows 1,800 sampled neuron coordinates; the simulation updates the full retained graph. Display gains are labeled in the interface.
-
-## Model
-
-Seven measurements of the game state drive 14 paired channels assigned to 3,377 R1–R6 neurons. These include gap height, velocity, gate distance, fly height, the following gap, wind, and gap width. The controller does not receive rendered images.
-
-Connection weights use synapse counts normalized by total incoming weight. GABA and glutamate receive inhibitory signs; other transmitters receive excitatory signs. The recurrent update is:
-
-```text
-drive = 0.06 + 0.85 * W @ activity + sensory_input
-activity_next = 0.12 * activity + 0.88 * tanh(max(drive, 0))
-```
-
-The decoder reads 64 population averages and their changes. A probability above 0.5 requests a flap, subject to the wing cooldown. The implementation uses rate dynamics, not biological spikes or the Shiu leaky integrate-and-fire model.
-
-## Training and tests
-
-Stop the live server before offline training:
+Stop the live simulator before offline training:
 
 ```sh
 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1 \
@@ -59,18 +78,18 @@ OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1 \
 .venv/bin/python -m pytest -q
 ```
 
-Training starts with coach demonstrations, then collects corrections on states visited by the controller (DAgger). Evaluation freezes the decoder and uses separate course seeds.
+Training begins with coach demonstrations, then collects corrections on states the controller visits using DAgger. Evaluation freezes the decoder and performs no teacher actions or weight updates.
 
-The included [`evaluation.json`](reports/evaluation.json) records six completed standard courses and four wind/narrow courses, each capped at 15 gates. Untrained and silenced controls cleared zero gates. Shuffled wiring also completed its three courses with the same decoder. These results do not establish an advantage for the biological topology; that comparison would require retraining matched controls. Training history is in [`training.json`](reports/training.json).
+## Runtime design
 
-## Runtime
+Flybrain uses one low-priority CPU worker and one numerical-library thread. The worker targets a 45% compute duty cycle, the simulator runs at up to 10 decisions per wall-clock second, and rendering is capped at 30 FPS. The simulation idles when nobody is connected. There is no GPU training.
 
-One low-priority CPU worker runs the network, with one numerical-library thread and a 45% target duty cycle. This is cooperative pacing, not a system-wide CPU limit. The graph arrays occupy about 205 MB, with additional Python and browser memory overhead.
+## Scientific boundary
 
-The simulator runs at up to 10 decisions per wall-clock second, each advancing 50 ms of game time. Rendering is capped at 30 FPS. The simulation idles without connected viewers; Pause also stops it while connected. There is no GPU training.
+The connectome wiring and soma coordinates come from biological data. The sensory encoding, rate dynamics, decoder, game body, and training procedure are engineered.
 
-For frontend development, run the Python server with `npm start` and Vite with `npm run dev`. Vite proxies simulator requests to port 8765. Both services bind to loopback.
+This is not a complete biological fly simulation, a pixel-based retina, the published Shiu spiking model, or evidence that a living fly learned the game. The project is an inspectable experiment in routing a game-control problem through connectome-derived structure.
 
 ## Data and credits
 
-The [MaleCNS project](https://male-cns.janelia.org/) provides the connectome under CC BY 4.0. The fly and scenery are procedural meshes. See [`THIRD_PARTY.md`](THIRD_PARTY.md) for dataset, dependency, and research credits.
+The [MaleCNS project](https://male-cns.janelia.org/) provides the connectome under CC BY 4.0. Source URLs and hashes are recorded in [`data/sources.json`](data/sources.json). The fly and landscape are original procedural meshes. See [`THIRD_PARTY.md`](THIRD_PARTY.md) for dataset, software, and research credits.
