@@ -1,0 +1,284 @@
+{
+  "baseline": {
+    "meanScore": 0.0,
+    "meanSeconds": 0.85,
+    "completed": 0,
+    "episodes": 6,
+    "runs": [
+      {
+        "seed": 10001,
+        "score": 0,
+        "seconds": 0.85,
+        "reward": -4.15,
+        "reason": "Ground",
+        "difficulty": "meadow",
+        "decisions": 17,
+        "coachAgreement": 0.0
+      },
+      {
+        "seed": 10002,
+        "score": 0,
+        "seconds": 0.85,
+        "reward": -4.15,
+        "reason": "Ground",
+        "difficulty": "meadow",
+        "decisions": 17,
+        "coachAgreement": 0.0
+      },
+      {
+        "seed": 10003,
+        "score": 0,
+        "seconds": 0.85,
+        "reward": -4.15,
+        "reason": "Ground",
+        "difficulty": "meadow",
+        "decisions": 17,
+        "coachAgreement": 0.0
+      },
+      {
+        "seed": 10004,
+        "score": 0,
+        "seconds": 0.85,
+        "reward": -4.15,
+        "reason": "Ground",
+        "difficulty": "meadow",
+        "decisions": 17,
+        "coachAgreement": 0.0
+      },
+      {
+        "seed": 10005,
+        "score": 0,
+        "seconds": 0.85,
+        "reward": -4.15,
+        "reason": "Ground",
+        "difficulty": "meadow",
+        "decisions": 17,
+        "coachAgreement": 0.5882
+      },
+      {
+        "seed": 10006,
+        "score": 0,
+        "seconds": 0.85,
+        "reward": -4.15,
+        "reason": "Ground",
+        "difficulty": "meadow",
+        "decisions": 17,
+        "coachAgreement": 0.6471
+      }
+    ]
+  },
+  "trained": {
+    "meanScore": 15.0,
+    "meanSeconds": 35.199999999999996,
+    "completed": 6,
+    "episodes": 6,
+    "runs": [
+      {
+        "seed": 10001,
+        "score": 15,
+        "seconds": 35.2,
+        "reward": 80.2,
+        "reason": "Course complete",
+        "difficulty": "meadow",
+        "decisions": 704,
+        "coachAgreement": 0.9972
+      },
+      {
+        "seed": 10002,
+        "score": 15,
+        "seconds": 35.2,
+        "reward": 80.2,
+        "reason": "Course complete",
+        "difficulty": "meadow",
+        "decisions": 704,
+        "coachAgreement": 0.9957
+      },
+      {
+        "seed": 10003,
+        "score": 15,
+        "seconds": 35.2,
+        "reward": 80.2,
+        "reason": "Course complete",
+        "difficulty": "meadow",
+        "decisions": 704,
+        "coachAgreement": 0.9957
+      },
+      {
+        "seed": 10004,
+        "score": 15,
+        "seconds": 35.2,
+        "reward": 80.2,
+        "reason": "Course complete",
+        "difficulty": "meadow",
+        "decisions": 704,
+        "coachAgreement": 0.9943
+      },
+      {
+        "seed": 10005,
+        "score": 15,
+        "seconds": 35.2,
+        "reward": 80.2,
+        "reason": "Course complete",
+        "difficulty": "meadow",
+        "decisions": 704,
+        "coachAgreement": 0.9957
+      },
+      {
+        "seed": 10006,
+        "score": 15,
+        "seconds": 35.2,
+        "reward": 80.2,
+        "reason": "Course complete",
+        "difficulty": "meadow",
+        "decisions": 704,
+        "coachAgreement": 0.9986
+      }
+    ]
+  },
+  "perturbations": {
+    "meanScore": 15.0,
+    "meanSeconds": 35.2,
+    "completed": 4,
+    "episodes": 4,
+    "runs": [
+      {
+        "seed": 20001,
+        "score": 15,
+        "seconds": 35.2,
+        "reward": 80.2,
+        "reason": "Course complete",
+        "difficulty": "wind",
+        "decisions": 704,
+        "coachAgreement": 0.9957
+      },
+      {
+        "seed": 20002,
+        "score": 15,
+        "seconds": 35.2,
+        "reward": 80.2,
+        "reason": "Course complete",
+        "difficulty": "narrow",
+        "decisions": 704,
+        "coachAgreement": 0.9858
+      },
+      {
+        "seed": 20003,
+        "score": 15,
+        "seconds": 35.2,
+        "reward": 80.2,
+        "reason": "Course complete",
+        "difficulty": "wind",
+        "decisions": 704,
+        "coachAgreement": 0.983
+      },
+      {
+        "seed": 20004,
+        "score": 15,
+        "seconds": 35.2,
+        "reward": 80.2,
+        "reason": "Course complete",
+        "difficulty": "narrow",
+        "decisions": 704,
+        "coachAgreement": 0.9886
+      }
+    ]
+  },
+  "silenced": {
+    "meanScore": 0.0,
+    "meanSeconds": 0.85,
+    "completed": 0,
+    "episodes": 3,
+    "runs": [
+      {
+        "seed": 10001,
+        "score": 0,
+        "seconds": 0.85,
+        "reward": -4.15,
+        "reason": "Ground",
+        "difficulty": "meadow",
+        "decisions": 17,
+        "coachAgreement": 0.0
+      },
+      {
+        "seed": 10002,
+        "score": 0,
+        "seconds": 0.85,
+        "reward": -4.15,
+        "reason": "Ground",
+        "difficulty": "meadow",
+        "decisions": 17,
+        "coachAgreement": 0.0
+      },
+      {
+        "seed": 10003,
+        "score": 0,
+        "seconds": 0.85,
+        "reward": -4.15,
+        "reason": "Ground",
+        "difficulty": "meadow",
+        "decisions": 17,
+        "coachAgreement": 0.0
+      }
+    ]
+  },
+  "shuffled": {
+    "meanScore": 15.0,
+    "meanSeconds": 35.2,
+    "completed": 3,
+    "episodes": 3,
+    "runs": [
+      {
+        "seed": 10001,
+        "score": 15,
+        "seconds": 35.2,
+        "reward": 80.2,
+        "reason": "Course complete",
+        "difficulty": "meadow",
+        "decisions": 704,
+        "coachAgreement": 0.9432
+      },
+      {
+        "seed": 10002,
+        "score": 15,
+        "seconds": 35.2,
+        "reward": 80.2,
+        "reason": "Course complete",
+        "difficulty": "meadow",
+        "decisions": 704,
+        "coachAgreement": 0.9375
+      },
+      {
+        "seed": 10003,
+        "score": 15,
+        "seconds": 35.2,
+        "reward": 80.2,
+        "reason": "Course complete",
+        "difficulty": "meadow",
+        "decisions": 704,
+        "coachAgreement": 0.9389
+      }
+    ]
+  },
+  "gateCap": 15,
+  "trainingSamples": 4712,
+  "trainingSeeds": [
+    101,
+    102,
+    103,
+    104,
+    501,
+    502,
+    503,
+    504
+  ],
+  "evaluationSeeds": [
+    10001,
+    10002,
+    10003,
+    10004,
+    10005,
+    10006
+  ],
+  "claim": "Decoder learning only. Whole graph simulated. No claim of biological learning or topology advantage.",
+  "elapsedSeconds": 588.6
+}
